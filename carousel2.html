@@ -1,0 +1,203 @@
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shiny Image Carousel</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  <style type="text/css" media="screen">
+  
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background-color: #e3e3e3;
+      color: #a1a1a1;
+      font: 16px/1.3em 'Roboto', sans-serif;
+      padding: 70px 0;
+    }
+    
+    .container {
+      margin: 0 auto;
+      width: 350px;
+      height: 200px;
+      position: relative;
+      perspective: 1000px;
+    }
+    
+    .carousel,
+    .item {
+      transition: transform 0.6s ease;
+    }
+    
+    .carousel {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+    }
+    
+    .carousel img {
+      max-width: 100%;
+    }
+    
+    .carousel h3 {
+      font-size: 14px;
+    }
+    
+    .carousel p {
+      font-size: 11px;
+    }
+    
+    .carousel div {
+      transform-style: preserve-3d;
+      
+    }
+    
+    .item {
+      background-color: #000;
+      display: block;
+      position: absolute;
+      width: 350px;
+      height: 200px;
+      font-size: 5em;
+      text-align: center;
+      opacity: 0.95;
+    }
+    
+    .next, .prev {
+      color: #444;
+      position: absolute;
+      top: 75px;
+      padding: 16px;
+      cursor: pointer;
+      background: #ccc;
+    }
+    
+    .next { 
+      right: 2%; 
+    }
+    
+    .prev { 
+      left: 2%; 
+    }
+
+  </style>
+</head>
+<body>
+    
+  <div class="container">
+    <div class="carousel">
+      <div class="item-wrapper active">
+        <div class="item">
+          <div class="item-img">
+            <img src="http://placehold.it/750x250?text=one" alt="" />  
+          </div>
+          <h3>Heading</h3>
+          <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+      </div>
+      <div class="item-wrapper">
+        <div class="item">
+          <div class="item-img">
+            <img src="http://placehold.it/750x250?text=two" alt="" />  
+          </div>
+          <h3>Heading</h3>
+          <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+      </div>
+      <div class="item-wrapper">
+        <div class="item">
+          <div class="item-img">
+            <img src="http://placehold.it/750x250?text=three" alt="" />  
+          </div>
+          <h3>Heading</h3>
+          <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+      </div>
+      <div class="item-wrapper">
+        <div class="item">
+          <div class="item-img">
+            <img src="http://placehold.it/750x250?text=four" alt="" />  
+          </div>
+          <h3>Heading</h3>
+          <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+      </div>
+      <div class="item-wrapper">
+        <div class="item">
+          <div class="item-img">
+            <img src="http://placehold.it/750x250?text=five" alt="" />  
+          </div>
+          <h3>Heading</h3>
+          <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+      </div>
+      <div class="item-wrapper">
+        <div class="item">
+          <div class="item-img">
+            <img src="http://placehold.it/750x250?text=six" alt="" />  
+          </div>
+          <h3>Heading</h3>
+          <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="next">Next</div>
+  <div class="prev">Prev</div>
+  
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script>
+  var $carousel = $('.carousel'),
+      $itemWrappers = $('.item-wrapper'),
+      $items = $('.item'),
+      itemWidth = $('.item:first').outerWidth();
+      currentDeg  = 0,
+      itemAngle = 360 / $items.length,
+      // tangent equation
+      translateZVal = Math.round( ( itemWidth / 2 ) / Math.tan( Math.PI / $items.length ) );
+  
+  for(var i = 0; i < $items.length; i++) {
+    var thisRotation = itemAngle*i;
+    // set initial transforms for i amount of elements
+    $itemWrappers.eq(i).css({
+      "-webkit-transform": "rotateY("+thisRotation+"deg) translateZ("+ translateZVal +"px) rotateY("+-thisRotation+"deg)",
+      "-moz-transform": "rotateY("+thisRotation+"deg) translateZ("+ translateZVal +"px) rotateY("+-thisRotation+"deg)",
+      "-o-transform": "rotateY("+thisRotation+"deg) translateZ("+ translateZVal +"px) rotateY("+-thisRotation+"deg)",
+      "transform": "rotateY("+thisRotation+"deg) translateZ("+ translateZVal +"px) rotateY("+-thisRotation+"deg)"
+    })
+  }
+  
+  $(".next").on("click", { dir: "next" }, rotate);
+  $(".prev").on("click", { dir: "prev" }, rotate);
+  
+  function rotate(e){
+    if(e.data.dir=="next"){
+      currentDeg = currentDeg - itemAngle;
+    }
+    if(e.data.dir=="prev"){
+      currentDeg = currentDeg + itemAngle;
+    }
+    // reset rotation so items are not viewed from perspective
+    $carousel.css({
+      "-webkit-transform": "rotateY("+currentDeg+"deg)",
+      "-moz-transform": "rotateY("+currentDeg+"deg)",
+      "-o-transform": "rotateY("+currentDeg+"deg)",
+      "transform": "rotateY("+currentDeg+"deg)"
+    });
+      $items.css({
+      "-webkit-transform": "rotateY("+(-currentDeg)+"deg)",
+      "-moz-transform": "rotateY("+(-currentDeg)+"deg)",
+      "-o-transform": "rotateY("+(-currentDeg)+"deg)",
+      "transform": "rotateY("+(-currentDeg)+"deg)"
+    });
+  }
+  </script>
+
+</body>
+</html>
